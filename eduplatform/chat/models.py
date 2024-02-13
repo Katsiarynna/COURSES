@@ -43,7 +43,6 @@ class ConversationRequest(models.Model, DateTimeMixin):
     to_user = models.ForeignKey(User, related_name='requests_received', on_delete=models.CASCADE)
     message = models.TextField()
 
-    @property
     def __str__(self):
         return f"Request from {self.from_user} to {self.to_user}"
 

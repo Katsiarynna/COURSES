@@ -38,7 +38,7 @@ class GroupViewSet(ModelViewSet):
 
 class EmailViewSet(ModelViewSet):
     queryset = Email.objects.all()
-    serializer_class = GroupSerializer
+    serializer_class = EmailSerializer
     permission_classes = [permissions.AllowAny]
 
 
@@ -83,11 +83,14 @@ class RegisterUserViewSet(mixins.CreateModelMixin, GenericViewSet):
 class EmailListCreateView(ListCreateAPIView):
     queryset = Email.objects.all()
     serializer_class = EmailSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Email.objects.filter(recipient=user)
+        if isinstance(user, Teacher):
+            return Email.objects.filter(sender=user)
+        else:
+            return Email.objects.none()
 
     def perform_create(self, serializer):
         serializer.save(sender=self.request.user)
@@ -96,4 +99,4 @@ class EmailListCreateView(ListCreateAPIView):
 class EmailDetailView(generics.RetrieveAPIView):
     queryset = Email.objects.all()
     serializer_class = EmailSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]

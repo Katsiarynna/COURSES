@@ -1,10 +1,3 @@
-"""user,
-teacher,
-student,
-course,
-group,
-topic,
-article"""
 
 from dataclasses import dataclass
 from typing import List
@@ -92,6 +85,32 @@ class AttemptAnnotation:
     test: TestAnnotation
     student: StudentAnnotation
     score: int
+
+@dataclass(frozen=True, slots=True)
+class EmailAnnotation:
+    recipients: TeacherAnnotation
+    is_read: True
+    sender: StudentAnnotation
+    subject: str
+    message: str
+
+@dataclass(frozen=True, slots=True)
+class RoomAnnotation:
+    name: str
+    online: True
+
+@dataclass(frozen=True, slots=True)
+class MessageAnnotation:
+    room: RoomAnnotation
+    user: UserAnnotation
+    content: str
+
+@dataclass(frozen=True, slots=True)
+class ConversationRequest:
+    from_user: UserAnnotation
+    to_user: UserAnnotation
+    message: str
+
 
 
 

@@ -12,7 +12,8 @@ from .serializers import (
 __all__ = {"CreateUserTest", 'ReadUserTest', 'UpdateUserTest', 'DeleteUserTest',
            'CreateTeacherTest', 'ReadTeacherTest', 'UpdateTeacherTest', 'DeleteTeacherTest',
            'CreateStudentTest', 'ReadStudentTest', 'UpdateStudentTest', 'DeleteStudentTest',
-           'CreateGroupTest', 'ReadGroupTest', 'UpdateGroupTest', 'DeleteGroupTest'}
+           'CreateGroupTest', 'ReadGroupTest', 'UpdateGroupTest', 'DeleteGroupTest',
+           "CreateEmailTest", 'ReadEmailTest', 'UpdateEmailTest', 'DeleteEmailTest'}
 
 
 class CreateUserTest(APITestCase):
@@ -238,18 +239,67 @@ class DeleteGroupTest(APITestCase):
 class CreateEmailTest(APITestCase):
     def setUp(self):
         self.user = create_user()
-        self.teacher = create_teacher(self.user)
+        self.client.force_login(self.user)
         self.student = create_student(self.user)
-        self.email = create_email(sender=self.user, recipients=[self.teacher])
+        self.teacher = create_teacher(self.user)
 
     def test_create_email(self):
         url = reverse("email-list")
         response = self.client.post(
             url,
             data={
-                "subject": "Test",
-                "email": self.email.id,
-                "message": "test_text",
-                "is_read": True},
+                "sender": self.student.id,
+                "recipients": self.teacher.id,
+                'is_read': True,
+                "subject": 'issue',
+                "message": '1+2=?'},
             format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class ReadEmailTest(APITestCase):
+    def setUp(self):
+        self.user = create_user()
+        self.client.force_login(self.user)
+        self.student = create_student(self.user)
+        self.teacher = create_teacher(self.user)
+        self.email = create_email(user_id=self.user)
+
+    def test_read_email_list(self):
+        url = reverse("email-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_read_email_detail(self):
+        url = reverse("email-detail", args=[self.email.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UpdateEmailTest(APITestCase):
+    def setUp(self):
+        self.user = create_user()
+        self.client.force_login(self.user)
+        self.student = create_student(self.user)
+        self.teacher = create_teacher(self.user)
+        self.email = create_email(user_id=self.user)
+        self.data = EmailSerializer(self.email).data
+        self.data.update({"subject": 'different questions'})
+
+    def test_update_email(self):
+        url = reverse("email-detail", args=[self.email.id])
+        response = self.client.put(url, self.data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class DeleteEmailTest(APITestCase):
+    def setUp(self):
+        self.user = create_user()
+        self.student = create_student(self.user)
+        self.teacher = create_teacher(self.user)
+        self.email = create_email(user_id=self.user)
+
+    def test_delete_email(self):
+        url = reverse("email-detail", args=[self.email.id])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

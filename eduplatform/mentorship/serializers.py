@@ -21,6 +21,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Group
         fields = "__all__"
@@ -73,11 +74,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
 
+
 class EmailSerializer(serializers.ModelSerializer):
     sender = UserSerializer(read_only=True)
-    recipients = UserSerializer(many=True, read_only=True)
+    recipients = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Email
-        fields = ['id', 'sender', 'recipients', 'subject', 'message', 'is_read']
+        fields = ['sender', 'recipients', 'subject', 'message', 'is_read']
         read_only_fields = ['is_read']

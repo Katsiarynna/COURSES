@@ -1,11 +1,13 @@
 from .models import User, Teacher, Student, Group, Email
 from testing_system.models import (Course, Topic, Article,
                                    Test, Question, Answer, Attempt)
+from chat.models import Room, Message, ConversationRequest
+
 from .annotations import (
     UserAnnotation, TeacherAnnotation, StudentAnnotation,
     CourseAnnotation, TopicAnnotation, GroupAnnotation,
     ArticleAnnotation, TestAnnotation, QuestionAnnotation,
-    AnswerAnnotation, AttemptAnnotation)
+    AnswerAnnotation, AttemptAnnotation, EmailAnnotation)
 
 
 USER_DATA = {
@@ -86,12 +88,43 @@ def create_attempt(test_id, student_id) -> AttemptAnnotation:
         score=50)
     return attempt
 
-def create_email(user_id):
+
+def create_email(user_id) -> EmailAnnotation:
     email = Email.objects.create(
-        user=user_id,
-        subject="Test",
-        message="test_text",
-        is_read=True
+        sender=user_id,
+        recipients=user_id,
+        subject='issue',
+        message='1+2=?'
     )
     return email
+
+def create_room(user):
+    room = Room.objects.create(
+        name="Lucky"
+    )
+    room.online.add(user)
+    return room
+
+
+def create_message(user, room):
+    message = Message.objects.create(
+        room=room,
+        user=user,
+        content="Very interesting"
+    )
+    return message
+
+
+def create_conversationrequest(user_id):
+    user = User.objects.get(pk=user_id)
+    conversationrequest = ConversationRequest.objects.create(
+        from_user=user,
+        to_user=user,  # Например, отправляем запрос самому себе
+        message="Test for my chat"
+    )
+    return conversationrequest
+
+
+
+
 

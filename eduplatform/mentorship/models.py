@@ -76,7 +76,7 @@ class Group(models.Model, DateTimeMixin):
 class Email(models.Model, DateTimeMixin):
     objects = None
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_letters')
-    recipients = models.ManyToManyField(User, related_name='received_letter')
+    recipients = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='received_letter')
     subject = models.CharField(max_length=255)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
@@ -87,4 +87,3 @@ class Email(models.Model, DateTimeMixin):
     class Meta:
         verbose_name = "email"
         verbose_name_plural = "emails"
-
