@@ -14,9 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="email",
             name="recipients",
-            field=models.ManyToManyField(
-                related_name="received_letter", to="mentorship.teacher"
-            ),
+            field=models.ManyToManyField(related_name="received_letter", to="mentorship.teacher"),
         ),
         migrations.AlterField(
             model_name="email",

@@ -1,25 +1,61 @@
+from django.urls import reverse
+from mentorship.consts import (
+    USER_DATA,
+    create_answer,
+    create_article,
+    create_attempt,
+    create_course,
+    create_group,
+    create_question,
+    create_student,
+    create_teacher,
+    create_test,
+    create_topic,
+    create_user,
+)
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
 
-from mentorship.consts import \
-    (USER_DATA, create_user, create_teacher,
-    create_student, create_course, create_group,
-     create_topic, create_article, create_test,
-     create_question, create_answer, create_attempt)
+from .serializers import (
+    AnswerSerializer,
+    ArticleSerializer,
+    AttemptSerializer,
+    CourseSerializer,
+    QuestionSerializer,
+    TestSerializer,
+    TopicSerializer,
+)
 
-from .serializers import (CourseSerializer, TopicSerializer,
-                          ArticleSerializer, TestSerializer,
-                          QuestionSerializer, AnswerSerializer,
-                          AttemptSerializer)
-
-__all__ = {'CreateCourseTest', 'ReadCourseTest', 'UpdateCourseTest', 'DeleteCourseTest',
-           'CreateTopicTest', 'ReadTopicTest', 'UpdateTopicTest', 'DeleteTopicTest',
-           'CreateArticleTest', 'ReadArticleTest', 'UpdateArticleTest', 'DeleteArticleTest',
-           'CreateTestTest', 'ReadTestTest', 'UpdateTestTest', 'DeleteTestTest',
-           'CreateQuestionTest', 'ReadQuestionTest', 'UpdateQuestionTest', 'DeleteQuestionTest',
-           'CreateAnswerTest', 'ReadAnswerTest', 'UpdateAnswerTest', 'DeleteAnswerTest',
-           'CreateAttemptTest', 'ReadAttemptTest', 'UpdateAttemptTest', 'DeleteAttemptTest'}
+__all__ = {
+    "CreateCourseTest",
+    "ReadCourseTest",
+    "UpdateCourseTest",
+    "DeleteCourseTest",
+    "CreateTopicTest",
+    "ReadTopicTest",
+    "UpdateTopicTest",
+    "DeleteTopicTest",
+    "CreateArticleTest",
+    "ReadArticleTest",
+    "UpdateArticleTest",
+    "DeleteArticleTest",
+    "CreateTestTest",
+    "ReadTestTest",
+    "UpdateTestTest",
+    "DeleteTestTest",
+    "CreateQuestionTest",
+    "ReadQuestionTest",
+    "UpdateQuestionTest",
+    "DeleteQuestionTest",
+    "CreateAnswerTest",
+    "ReadAnswerTest",
+    "UpdateAnswerTest",
+    "DeleteAnswerTest",
+    "CreateAttemptTest",
+    "ReadAttemptTest",
+    "UpdateAttemptTest",
+    "DeleteAttemptTest",
+}
 
 
 class CreateCourseTest(APITestCase):
@@ -29,11 +65,7 @@ class CreateCourseTest(APITestCase):
 
     def test_create_course(self):
         url = reverse("course-list")
-        response = self.client.post(url, data={
-            'course_name': "Test",
-            "teacher": self.teacher.id,
-            "price": 1000
-        }, format="json")
+        response = self.client.post(url, data={"course_name": "Test", "teacher": self.teacher.id, "price": 1000}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -88,12 +120,7 @@ class CreateTopicTest(APITestCase):
 
     def test_create_topic(self):
         url = reverse("topic-list")
-        response = self.client.post(
-            url,
-            data={"name": "Test",
-                  "course": self.course.id,
-                  "content": "123456"},
-            format="json")
+        response = self.client.post(url, data={"name": "Test", "course": self.course.id, "content": "123456"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -152,13 +179,7 @@ class CreateArticleTest(APITestCase):
 
     def test_create_article(self):
         url = reverse("article-list")
-        response = self.client.post(
-            url,
-            data={"title": "Test",
-                  "topic": self.topic.id,
-                  "teacher": self.teacher.id,
-                  "content": "123456"},
-            format="json")
+        response = self.client.post(url, data={"title": "Test", "topic": self.topic.id, "teacher": self.teacher.id, "content": "123456"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -220,15 +241,7 @@ class CreateTestTest(APITestCase):
 
     def test_create_test(self):
         url = reverse("test-list")
-        response = self.client.post(
-            url,
-            data={
-                "title": "Test",
-                "topic": self.topic.id,
-                "teacher": self.teacher.id,
-                "description": "123456",
-                "is_open": False},
-            format="json")
+        response = self.client.post(url, data={"title": "Test", "topic": self.topic.id, "teacher": self.teacher.id, "description": "123456", "is_open": False}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -249,6 +262,7 @@ class ReadTestTest(APITestCase):
         url = reverse("test-detail", args=[self.test.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class UpdateTestTest(APITestCase):
     def setUp(self):
@@ -290,13 +304,7 @@ class CreateQuestionTest(APITestCase):
 
     def test_create_question(self):
         url = reverse("question-list")
-        response = self.client.post(
-            url,
-            data={
-                "text": "question-test",
-                "test": self.test.id,
-                "is_important": True},
-            format="json")
+        response = self.client.post(url, data={"text": "question-test", "test": self.test.id, "is_important": True}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -306,8 +314,7 @@ class ReadQuestionTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
         self.question = create_question(test_id=self.test)
 
     def test_read_question_list(self):
@@ -327,8 +334,7 @@ class UpdateQuestionTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
         self.question = create_question(test_id=self.test)
         self.data = QuestionSerializer(self.question).data
         self.data.update({"text": "NewText"})
@@ -345,8 +351,7 @@ class DeleteQuestionTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
         self.question = create_question(test_id=self.test)
         self.data = QuestionSerializer(self.question).data
         self.data.update({"text": "NewText"})
@@ -363,21 +368,14 @@ class CreateAnswerTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
         self.question = create_question(test_id=self.test)
         self.data = QuestionSerializer(self.question).data
         self.data.update({"text": "NewText"})
 
     def test_create_test(self):
         url = reverse("answer-list")
-        response = self.client.post(
-            url,
-            data={
-                "text": "answer-text",
-                "question": self.question.id,
-                "is_correct": True},
-            format="json")
+        response = self.client.post(url, data={"text": "answer-text", "question": self.question.id, "is_correct": True}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -387,8 +385,7 @@ class ReadAnswerTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
         self.question = create_question(test_id=self.test)
         self.answer = create_answer(self.question)
 
@@ -409,12 +406,11 @@ class UpdateAnswerTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
         self.question = create_question(test_id=self.test)
         self.answer = create_answer(self.question)
         self.data = AnswerSerializer(self.answer).data
-        self.data.update({'text': "new_answer_text"})
+        self.data.update({"text": "new_answer_text"})
 
     def test_update_answer(self):
         url = reverse("answer-detail", args=[self.answer.id])
@@ -428,8 +424,7 @@ class DeleteAnswerTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
         self.question = create_question(test_id=self.test)
         self.answer = create_answer(self.question)
 
@@ -446,18 +441,11 @@ class CreateAttemptTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
 
     def test_create_attempt(self):
         url = reverse("attempt-list")
-        response = self.client.post(
-            url,
-            data={
-                "test": self.test.id,
-                "student": self.student.id,
-                "score": 50},
-            format="json")
+        response = self.client.post(url, data={"test": self.test.id, "student": self.student.id, "score": 50}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -468,10 +456,8 @@ class ReadAttemptTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
-        self.attempt = create_attempt(test_id=self.test,
-                                      student_id=self.student)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
+        self.attempt = create_attempt(test_id=self.test, student_id=self.student)
 
     def test_read_attempt_list(self):
         url = reverse("attempt-list")
@@ -491,10 +477,8 @@ class UpdateAttemptTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
-        self.attempt = create_attempt(test_id=self.test,
-                                      student_id=self.student)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
+        self.attempt = create_attempt(test_id=self.test, student_id=self.student)
         self.data = AttemptSerializer(self.attempt).data
         self.data.update({"score": 60})
 
@@ -511,10 +495,8 @@ class DeleteAttemptTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.course = create_course(self.teacher)
         self.topic = create_topic(self.course)
-        self.test = create_test(teacher_id=self.teacher,
-                                topic_id=self.topic)
-        self.attempt = create_attempt(test_id=self.test,
-                                      student_id=self.student)
+        self.test = create_test(teacher_id=self.teacher, topic_id=self.topic)
+        self.attempt = create_attempt(test_id=self.test, student_id=self.student)
 
     def test_delete_attempt(self):
         url = reverse("attempt-detail", args=[self.attempt.id])

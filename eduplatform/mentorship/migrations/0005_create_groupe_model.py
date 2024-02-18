@@ -36,9 +36,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "student",
-                    models.ManyToManyField(
-                        blank=True, default=None, to="mentorship.student"
-                    ),
+                    models.ManyToManyField(blank=True, default=None, to="mentorship.student"),
                 ),
                 (
                     "teacher",

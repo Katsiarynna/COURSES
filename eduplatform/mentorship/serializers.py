@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import User, Teacher, Student, Group, Email
+
+from .models import Email, Group, Student, Teacher, User
 
 
 class UserSerializer(serializers.ModelSerializer):

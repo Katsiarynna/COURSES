@@ -1,25 +1,52 @@
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
 
 from .consts import (
-      USER_DATA, create_user, create_teacher,
-      create_student, create_course, create_group, create_email)
+    USER_DATA,
+    create_course,
+    create_email,
+    create_group,
+    create_student,
+    create_teacher,
+    create_user,
+)
 from .serializers import (
-      UserSerializer, TeacherSerializer,
-      StudentSerializer, GroupSerializer, EmailSerializer)
+    EmailSerializer,
+    GroupSerializer,
+    StudentSerializer,
+    TeacherSerializer,
+    UserSerializer,
+)
 
-__all__ = {"CreateUserTest", 'ReadUserTest', 'UpdateUserTest', 'DeleteUserTest',
-           'CreateTeacherTest', 'ReadTeacherTest', 'UpdateTeacherTest', 'DeleteTeacherTest',
-           'CreateStudentTest', 'ReadStudentTest', 'UpdateStudentTest', 'DeleteStudentTest',
-           'CreateGroupTest', 'ReadGroupTest', 'UpdateGroupTest', 'DeleteGroupTest',
-           "CreateEmailTest", 'ReadEmailTest', 'UpdateEmailTest', 'DeleteEmailTest'}
+__all__ = {
+    "CreateUserTest",
+    "ReadUserTest",
+    "UpdateUserTest",
+    "DeleteUserTest",
+    "CreateTeacherTest",
+    "ReadTeacherTest",
+    "UpdateTeacherTest",
+    "DeleteTeacherTest",
+    "CreateStudentTest",
+    "ReadStudentTest",
+    "UpdateStudentTest",
+    "DeleteStudentTest",
+    "CreateGroupTest",
+    "ReadGroupTest",
+    "UpdateGroupTest",
+    "DeleteGroupTest",
+    "CreateEmailTest",
+    "ReadEmailTest",
+    "UpdateEmailTest",
+    "DeleteEmailTest",
+}
 
 
 class CreateUserTest(APITestCase):
     def test_create_user(self):
-        url = reverse('user-list')
-        response = self.client.post(url, data=USER_DATA, format='json')
+        url = reverse("user-list")
+        response = self.client.post(url, data=USER_DATA, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -46,7 +73,7 @@ class UpdateUserTest(APITestCase):
 
     def test_update_user(self):
         url = reverse("user-detail", args=[self.user.id])
-        response = self.client.put(url, self.data, format='json')
+        response = self.client.put(url, self.data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -65,11 +92,8 @@ class CreateTeacherTest(APITestCase):
         self.user = create_user()
 
     def test_create_user(self):
-        url = reverse('teacher-list')
-        response = self.client.post(
-              url,
-              data={"experience": 12, "user": self.user.id},
-              format='json')
+        url = reverse("teacher-list")
+        response = self.client.post(url, data={"experience": 12, "user": self.user.id}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -98,7 +122,7 @@ class UpdateTeacherTest(APITestCase):
 
     def test_update_teacher(self):
         url = reverse("teacher-detail", args=[self.teacher.id])
-        response = self.client.put(url, self.data, format='json')
+        response = self.client.put(url, self.data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -118,11 +142,8 @@ class CreateStudentTest(APITestCase):
         self.user = create_user()
 
     def test_create_student(self):
-        url = reverse('student-list')
-        response = self.client.post(
-              url,
-              data={"age": 22, "user": self.user.id, "rating": 85.30},
-              format='json')
+        url = reverse("student-list")
+        response = self.client.post(url, data={"age": 22, "user": self.user.id, "rating": 85.30}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -151,7 +172,7 @@ class UpdateStudentTest(APITestCase):
 
     def test_update_student(self):
         url = reverse("student-detail", args=[self.student.id])
-        response = self.client.put(url, self.data, format='json')
+        response = self.client.put(url, self.data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -175,15 +196,8 @@ class CreateGroupTest(APITestCase):
         self.course = create_course(self.teacher)
 
     def test_create_group(self):
-        url = reverse('group-list')
-        response = self.client.post(
-              url,
-              data={
-                    "group_name": "Test",
-                    "teacher": self.teacher.id,
-                    "student": [self.student.id],
-                    "course": self.course.id},
-              format='json')
+        url = reverse("group-list")
+        response = self.client.post(url, data={"group_name": "Test", "teacher": self.teacher.id, "student": [self.student.id], "course": self.course.id}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -218,7 +232,7 @@ class UpdateGroupTest(APITestCase):
 
     def test_update_group(self):
         url = reverse("group-detail", args=[self.group.id])
-        response = self.client.put(url, self.data, format='json')
+        response = self.client.put(url, self.data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -245,15 +259,7 @@ class CreateEmailTest(APITestCase):
 
     def test_create_email(self):
         url = reverse("email-list")
-        response = self.client.post(
-            url,
-            data={
-                "sender": self.student.id,
-                "recipients": self.teacher.id,
-                'is_read': True,
-                "subject": 'issue',
-                "message": '1+2=?'},
-            format="json")
+        response = self.client.post(url, data={"sender": self.student.id, "recipients": self.teacher.id, "is_read": True, "subject": "issue", "message": "1+2=?"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -284,11 +290,11 @@ class UpdateEmailTest(APITestCase):
         self.teacher = create_teacher(self.user)
         self.email = create_email(user_id=self.user)
         self.data = EmailSerializer(self.email).data
-        self.data.update({"subject": 'different questions'})
+        self.data.update({"subject": "different questions"})
 
     def test_update_email(self):
         url = reverse("email-detail", args=[self.email.id])
-        response = self.client.put(url, self.data, format='json')
+        response = self.client.put(url, self.data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

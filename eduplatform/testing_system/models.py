@@ -1,6 +1,6 @@
 from django.db import models
 from mentorship.mixins import DateTimeMixin
-from mentorship.models import Teacher, Student
+from mentorship.models import Student, Teacher
 
 
 class Course(models.Model, DateTimeMixin):

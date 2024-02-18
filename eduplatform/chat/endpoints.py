@@ -1,18 +1,21 @@
-from rest_framework.views import APIView
-from rest_framework import permissions
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
+from rest_framework import permissions, status
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Room, Message, ConversationRequest
-from .serializers import RoomSerializer, MessageSerializer, ConversationRequestSerializer
+from .models import ConversationRequest, Message, Room
+from .serializers import (
+    ConversationRequestSerializer,
+    MessageSerializer,
+    RoomSerializer,
+)
 
 
 def room(request, room_name):
     room_object = get_object_or_404(Room, name=room_name)
     messages = Message.objects.filter(room=room_object)
-    return render(request, 'chat/room.html', {'room_name': room_name, 'messages': messages})
+    return render(request, "chat/room.html", {"room_name": room_name, "messages": messages})
 
 
 class RoomViewSet(ModelViewSet):
@@ -64,6 +67,3 @@ class MessageViewSet(ModelViewSet):
 class MessageAPIView(APIView):
     queryset = []
     permission_classes = [permissions.IsAuthenticated]
-
-
-

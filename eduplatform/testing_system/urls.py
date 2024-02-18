@@ -1,9 +1,20 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .endpoints import (CourseViewSet, TestViewSet, ArticleViewSet, TopicViewSet,
-                        QuestionViewSet, AnswerViewSet, AttemptViewSet,
-                        CourseTopicAPIView, TopicArticleAPIView, TestQuestionAPIView,
-                        QuestionAnswerAPIView, CourseContentAPIView)
+
+from .endpoints import (
+    AnswerViewSet,
+    ArticleViewSet,
+    AttemptViewSet,
+    CourseContentAPIView,
+    CourseTopicAPIView,
+    CourseViewSet,
+    QuestionAnswerAPIView,
+    QuestionViewSet,
+    TestQuestionAPIView,
+    TestViewSet,
+    TopicArticleAPIView,
+    TopicViewSet,
+)
 
 router = DefaultRouter()
 router.register("course", CourseViewSet)
@@ -21,5 +32,5 @@ urlpatterns = [
     path("topic/<id>/articles/", TopicArticleAPIView.as_view(), name="topic_articles"),
     path("test/<id>/questions/", TestQuestionAPIView.as_view(), name="test_questions"),
     path("question/<id>/answers/", QuestionAnswerAPIView.as_view(), name="question_answers"),
-    path("course/<id>/content/", CourseContentAPIView.as_view(), name="course_content")
+    path("course/<id>/content/", CourseContentAPIView.as_view(), name="course_content"),
 ]

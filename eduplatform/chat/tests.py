@@ -1,19 +1,34 @@
+from django.urls import reverse
+from mentorship.consts import (
+    USER_DATA,
+    create_conversationrequest,
+    create_message,
+    create_room,
+    create_user,
+)
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
 
+from .serializers import (
+    ConversationRequestSerializer,
+    MessageSerializer,
+    RoomSerializer,
+)
 
-from mentorship.consts import \
-    (USER_DATA, create_user, create_room, create_message, create_conversationrequest)
-
-
-from .serializers import (MessageSerializer, RoomSerializer, ConversationRequestSerializer)
-
-
-__all__ = {"CreateRoomTest", 'ReadRoomTest', 'UpdateRoomTest', 'DeleteRoomTest',
-           'CreateMessageTest', 'ReadMessageTest', 'UpdateMessageTest', 'DeleteMessageTest',
-           'CreateConversationRequestTest', 'ReadConversationRequestTest',
-           'UpdateConversationRequestTest', 'DeleteConversationRequestTest'}
+__all__ = {
+    "CreateRoomTest",
+    "ReadRoomTest",
+    "UpdateRoomTest",
+    "DeleteRoomTest",
+    "CreateMessageTest",
+    "ReadMessageTest",
+    "UpdateMessageTest",
+    "DeleteMessageTest",
+    "CreateConversationRequestTest",
+    "ReadConversationRequestTest",
+    "UpdateConversationRequestTest",
+    "DeleteConversationRequestTest",
+}
 
 
 class CreateRoomTest(APITestCase):
@@ -23,10 +38,7 @@ class CreateRoomTest(APITestCase):
 
     def test_create_room(self):
         url = reverse("room-list")
-        response = self.client.post(url, data={
-            "user": self.user.id,
-            "name": "Lucky"
-        }, format="json")
+        response = self.client.post(url, data={"user": self.user.id, "name": "Lucky"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -81,11 +93,7 @@ class CreateMessageTest(APITestCase):
 
     def test_create_message(self):
         url = reverse("message-list")
-        response = self.client.post(url, data={
-            "user": self.user.id,
-            "room": self.room.id,
-            "content": "Very interesting"
-        }, format="json")
+        response = self.client.post(url, data={"user": self.user.id, "room": self.room.id, "content": "Very interesting"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -142,11 +150,7 @@ class CreateConversationRequestTest(APITestCase):
 
     def test_create_conversationrequest(self):
         url = reverse("conversationrequest-list")
-        response = self.client.post(url, data={
-            "from_user": self.user.id,
-            "to_user": self.user.id,
-            "message": "Test for my chat"
-        }, format="json")
+        response = self.client.post(url, data={"from_user": self.user.id, "to_user": self.user.id, "message": "Test for my chat"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -197,11 +201,3 @@ class DeleteConversationRequestTest(APITestCase):
         url = reverse("conversationrequest-detail", args=[self.conversationrequest.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-
-
-
-
-
-
-

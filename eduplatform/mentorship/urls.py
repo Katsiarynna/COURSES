@@ -1,10 +1,18 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .endpoints import \
-    (UserViewSet, TeacherViewSet, StudentViewSet, GroupViewSet, EmailViewSet,
-     GroupStudentAPIView, GroupMembersAPIView, RegisterUserViewSet,
-     EmailListCreateView, EmailDetailView)
 
+from .endpoints import (
+    EmailDetailView,
+    EmailListCreateView,
+    EmailViewSet,
+    GroupMembersAPIView,
+    GroupStudentAPIView,
+    GroupViewSet,
+    RegisterUserViewSet,
+    StudentViewSet,
+    TeacherViewSet,
+    UserViewSet,
+)
 
 router = DefaultRouter()
 router.register("user", UserViewSet)
@@ -19,7 +27,6 @@ urlpatterns = [
     path("", include(router.urls)),
     path("group/<id>/students", GroupStudentAPIView.as_view(), name="group_students"),
     path("group/<id>/members", GroupMembersAPIView.as_view(), name="group_members"),
-    path('emails/', EmailListCreateView.as_view(), name='email-list'),
-    path('email/<int:pk>/', EmailDetailView.as_view(), name='email-detail'),
+    path("emails/", EmailListCreateView.as_view(), name="email-list"),
+    path("email/<int:pk>/", EmailDetailView.as_view(), name="email-detail"),
 ]
-

@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass
 from typing import List
 
@@ -86,6 +85,7 @@ class AttemptAnnotation:
     student: StudentAnnotation
     score: int
 
+
 @dataclass(frozen=True, slots=True)
 class EmailAnnotation:
     recipients: TeacherAnnotation
@@ -94,10 +94,12 @@ class EmailAnnotation:
     subject: str
     message: str
 
+
 @dataclass(frozen=True, slots=True)
 class RoomAnnotation:
     name: str
     online: True
+
 
 @dataclass(frozen=True, slots=True)
 class MessageAnnotation:
@@ -105,12 +107,9 @@ class MessageAnnotation:
     user: UserAnnotation
     content: str
 
+
 @dataclass(frozen=True, slots=True)
 class ConversationRequest:
     from_user: UserAnnotation
     to_user: UserAnnotation
     message: str
-
-
-
-

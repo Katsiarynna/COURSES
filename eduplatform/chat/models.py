@@ -1,6 +1,7 @@
 from django.db import models
-from mentorship.models import User
 from mentorship.mixins import DateTimeMixin
+from mentorship.models import User
+
 
 class Room(models.Model, DateTimeMixin):
     name = models.CharField(max_length=100)
@@ -18,7 +19,7 @@ class Room(models.Model, DateTimeMixin):
         self.save()
 
     def __str__(self):
-        return f'{self.name} ({self.get_online_count()})'
+        return f"{self.name} ({self.get_online_count()})"
 
     class Meta:
         verbose_name = "room"
@@ -26,12 +27,12 @@ class Room(models.Model, DateTimeMixin):
 
 
 class Message(models.Model, DateTimeMixin):
-    room = models.ForeignKey(to=Room, related_name='message', on_delete=models.CASCADE)
+    room = models.ForeignKey(to=Room, related_name="message", on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     content = models.CharField(max_length=512)
 
     def __str__(self):
-        return f'{self.user.first_name}: {self.content}'
+        return f"{self.user.first_name}: {self.content}"
 
     class Meta:
         verbose_name = "message"
@@ -39,8 +40,8 @@ class Message(models.Model, DateTimeMixin):
 
 
 class ConversationRequest(models.Model, DateTimeMixin):
-    from_user = models.ForeignKey(User, related_name='requests_sent', on_delete=models.CASCADE)
-    to_user = models.ForeignKey(User, related_name='requests_received', on_delete=models.CASCADE)
+    from_user = models.ForeignKey(User, related_name="requests_sent", on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name="requests_received", on_delete=models.CASCADE)
     message = models.TextField()
 
     def __str__(self):

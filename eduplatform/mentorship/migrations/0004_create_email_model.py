@@ -30,9 +30,7 @@ class Migration(migrations.Migration):
                 ("is_read", models.BooleanField(default=False)),
                 (
                     "recipients",
-                    models.ManyToManyField(
-                        related_name="received_letter", to=settings.AUTH_USER_MODEL
-                    ),
+                    models.ManyToManyField(related_name="received_letter", to=settings.AUTH_USER_MODEL),
                 ),
                 (
                     "sender",

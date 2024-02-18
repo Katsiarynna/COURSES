@@ -1,15 +1,22 @@
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from rest_framework import permissions, mixins, generics
-from rest_framework.generics import ListAPIView, ListCreateAPIView
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from itertools import chain
-from rest_framework.routers import DefaultRouter
 
-from .models import User, Teacher, Student, Group, Email
-from .serializers import \
-    (UserSerializer, TeacherSerializer, StudentSerializer,
-     GroupSerializer, TeacherStudentSerializer, RegisterSerializer, EmailSerializer)
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, mixins, permissions
+from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.routers import DefaultRouter
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
+
+from .models import Email, Group, Student, Teacher, User
+from .serializers import (
+    EmailSerializer,
+    GroupSerializer,
+    RegisterSerializer,
+    StudentSerializer,
+    TeacherSerializer,
+    TeacherStudentSerializer,
+    UserSerializer,
+)
 
 
 class UserViewSet(ModelViewSet):
@@ -43,7 +50,7 @@ class EmailViewSet(ModelViewSet):
 
 
 router = DefaultRouter()
-router.register(r'emails', EmailViewSet, basename='email')
+router.register(r"emails", EmailViewSet, basename="email")
 
 
 class GroupStudentAPIView(ListAPIView):
@@ -79,6 +86,7 @@ class RegisterUserViewSet(mixins.CreateModelMixin, GenericViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return HttpResponse(f"User {serializer.validated_data['email']} created!", status=201)
+
 
 class EmailListCreateView(ListCreateAPIView):
     queryset = Email.objects.all()

@@ -2,15 +2,20 @@ from itertools import chain
 
 from django.db.models import Subquery
 from rest_framework import permissions
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, ListAPIView
 
-from .models import \
-    (Course, Topic, Article, Test,
-     Question, Answer, Attempt)
-from .serializers import \
-    (CourseSerializer, ArticleSerializer, TestSerializer, TopicSerializer,
-     QuestionSerializer, AnswerSerializer, AttemptSerializer, TopicArticleSerializer)
+from .models import Answer, Article, Attempt, Course, Question, Test, Topic
+from .serializers import (
+    AnswerSerializer,
+    ArticleSerializer,
+    AttemptSerializer,
+    CourseSerializer,
+    QuestionSerializer,
+    TestSerializer,
+    TopicArticleSerializer,
+    TopicSerializer,
+)
 
 ALL_COURSES = Course.objects.all()
 ALL_TOPICS = Topic.objects.all()
